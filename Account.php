@@ -19,14 +19,27 @@
 
 
         public static function Cliente(){
-            $cliente = new GuzzleHttp\Client();
-            return $cliente;
+            try {
+                $cliente = new GuzzleHttp\Client();
+                return $cliente;
+            } catch (\Throwable $e) {
+                //mandar a log $e->getMessage();
+                echo "Error controlado: Favor refrescar Token";
+            }
+           
         }//client
   
  
         public function getAccountData($url) { 
 
-            $this->client = new GuzzleHttp\Client();
+            try {
+                $this->client = new GuzzleHttp\Client();
+            } catch (\Throwable $e) {
+                //mandar a log $e->getMessage();
+                echo "Error controlado: Favor refrescar Token";
+            }
+
+           
             $this->credentials = parse_ini_file('credentials.ini');
             self::$accessToken = $this->credentials['accessToken'];
           

@@ -17,6 +17,9 @@ class Subscriber{
 
   private $urlSubscribers;
   private $ipUser;
+  private $headers;
+  
+  public $statusCode;
    
 
   public function __construct()
@@ -33,6 +36,12 @@ class Subscriber{
     $this->urlLista  = $this->listInfo['self_link'];
      
     $this->urlSubscribers = $this->urlLista."/subscribers";
+    $this->headers = [
+      'Content-Type' => 'application/json',
+      'Accept' => 'application/json',
+      'User-Agent' => 'AWeber-PHP-code-sample/1.0',
+      'Authorization' => 'Bearer ' . Account::$accessToken,
+    ];
     $this->ipUser = $_SERVER['REMOTE_ADDR'];  
   } //construct
 
@@ -41,15 +50,11 @@ class Subscriber{
   public function findSubscriber($email)
   {
 
-    $headers = [
-      'User-Agent' => 'AWeber-PHP-code-sample/1.0',
-      'Accept' => 'application/json',
-      'Authorization' => 'Bearer ' . Account::$accessToken,
-  ];
+
   $url = $this->urlSubscribers;
   $params = [
       'ws.op' => 'find',
-      'ad_tracking' => 'ebook',
+      //'ad_tracking' => 'ebook',
 /*       'area_code' => 555,
       'city' => 'Chalfont',
       'country' => 'United States',
@@ -74,10 +79,11 @@ class Subscriber{
       'verified_at' => '2017-07-18' */
   ];
   $findUrl = $url . '?' . http_build_query($params);
-  $response = Account::Cliente()->get($findUrl, ['headers' => $headers]);
+  $response = Account::Cliente()->get($findUrl, ['headers' => $this->headers]);
   $body = json_decode($response->getBody(), true);
+  $this->statusCode = $response->getStatusCode(); 
+  //$response->getReasonPhrase();
   return $body;
-
   } //findSubscriber
 
 
@@ -104,22 +110,62 @@ class Subscriber{
         ] */
       ];
 
-      $headers = [
-          'Content-Type' => 'application/json',
-          'Accept' => 'application/json',
-          'User-Agent' => 'AWeber-PHP-code-sample/1.0',
-          'Authorization' => 'Bearer ' . Account::$accessToken,
-      ];
+
 
       $url = $this->urlSubscribers;
       
-      $response = Account::Cliente()->post($url, ['json' => $body, 'headers' => $headers]);
+      $response = Account::Cliente()->post($url, ['json' => $body, 'headers' => $this->headers]);
       $data = $response->getHeader('Location')[0];
     
       return $data;
 
     } // addSubscriber
 
+
+
+
+
+    public function updateSubscriber($email, $name) 
+    {
+
+      $body = [
+/*         'ad_tracking' => 'ebook',
+        'custom_fields' => [
+          'apple' => 'fuji',
+          'pear' => 'bosc'
+        ], */
+        //'email' => $email,
+        'name'  => $name,
+/*         'last_followup_message_number_sent' => 0,
+        'misc_notes' => 'string',
+        
+        'strict_custom_fields' => true,
+        'tags' => [
+          'add' => [
+            'fast',
+            'lightspeed'
+          ],
+          'remove' => [
+            'slow'
+          ]
+        ] */
+      ];
+      // juan ; aca se puede mejorar pq el header siempre es el mismo  refactor
+/*       $headers = [
+          'Content-Type' => 'application/json',
+          'Accept' => 'application/json',
+          'User-Agent' => 'AWeber-PHP-code-sample/1.0',
+
+      ]; */
+      $url = $this->urlSubscribers;
+      //"https://api.aweber.com/1.0/accounts/{$accountId}/lists/{$listId}/subscribers";
+      $params = ['email' => $email];
+      $patchUrl = $url . '?' . http_build_query($params);
+      $response = Account::Cliente()->patch($patchUrl, ['json' => $body, 'headers' => $this->headers]);
+      $body = json_decode($response->getbody(), true);
+      print_r($body);
+
+    } //updateSubscriber()
 
 
 /*         try { 

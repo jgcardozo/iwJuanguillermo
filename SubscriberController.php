@@ -7,36 +7,23 @@ $email    = $_POST['email'];
 $name     = $_POST['name'];
 
 
-/* switch ($function)
-{
-    case 'existingSubscriber': existingSubscriber($email);
-        break;
-    case 'addSubscriber': addSubscriber($email, $name);
-      break;
-    case 'updateSubscriber': updateSubscriber($email, $name);
-      break;
-    
-  } //sw */
-
-
-
 $sus = new Subscriber();
-
+$result;
 $find = $sus->findSubscriber($email);
 
-print_r($find);
+
+if ($find['entries'][0]['email'] == $email){
+  //$result  = $sus->updateSubscriber($email, $name);
+//print_r($update)
+}else{
+  $result = $sus->addSubscriber($email, $name);  
+}//if 
+
+print_r($result );
 
 
 
-echo "fin";
 
-/* foreach ($find as $item) {
-  # code...
-} */
-
-//$add  = $sus->addSubscriber($email, $name);
-
-//echo $add;
 
 
 ?>
