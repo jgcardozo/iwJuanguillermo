@@ -125,7 +125,7 @@ class Subscriber{
 
 
 
-    public function updateSubscriber($email, $name) 
+    public function updateSubscriber($email, $name, $subsId) 
     {
 
       $body = [
@@ -134,12 +134,12 @@ class Subscriber{
           'apple' => 'fuji',
           'pear' => 'bosc'
         ], */
-        //'email' => $email,
+        'email' => $email,
         'name'  => $name,
-/*         'last_followup_message_number_sent' => 0,
-        'misc_notes' => 'string',
-        
-        'strict_custom_fields' => true,
+     /*    'last_followup_message_number_sent' => 0,
+        'misc_notes' => 'string',     
+        'strict_custom_fields' => true, */
+        /*
         'tags' => [
           'add' => [
             'fast',
@@ -150,24 +150,18 @@ class Subscriber{
           ]
         ] */
       ];
-      // juan ; aca se puede mejorar pq el header siempre es el mismo  refactor
-/*       $headers = [
-          'Content-Type' => 'application/json',
-          'Accept' => 'application/json',
-          'User-Agent' => 'AWeber-PHP-code-sample/1.0',
-
-      ]; */
-      $url = $this->urlSubscribers;
-      //"https://api.aweber.com/1.0/accounts/{$accountId}/lists/{$listId}/subscribers";
-      $params = ['email' => $email];
-      $patchUrl = $url . '?' . http_build_query($params);
-      $response = Account::Cliente()->patch($patchUrl, ['json' => $body, 'headers' => $this->headers]);
+      $url = $this->urlSubscribers   .'/'.$subsId;
+      //$params = ['email' => $email];
+      //$patchUrl = $url . '?' . http_build_query($params);
+      //$response = Account::Cliente()->patch($patchUrl, ['json' => $body, 'headers' => $this->headers]);
+      $response = Account::Cliente()->patch($url, ['json' => $body, 'headers' => $this->headers]);
       $body = json_decode($response->getbody(), true);
-      print_r($body);
-
+      return $body;
     } //updateSubscriber()
 
 
+
+   // juan
 /*         try { 
             $accounts =  $cuenta->getAccountData($url) ; 
             $res['status']  = count($accounts)>0 ? 'ok': 'error' ;

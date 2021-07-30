@@ -2,19 +2,21 @@
 
 require_once("Subscriber.php");
 
-//$function = $_REQUEST['function'];
+
 $email    = $_POST['email'];
 $name     = $_POST['name'];
 
-
 $sus = new Subscriber();
 $result;
+
+
 $find = $sus->findSubscriber($email);
+$subsId = $find['entries'][0]['id']; 
+
 
 
 if ($find['entries'][0]['email'] == $email){
-  //$result  = $sus->updateSubscriber($email, $name);
-//print_r($update)
+  $result  = $sus->updateSubscriber($email, $name, $subsId);
 }else{
   $result = $sus->addSubscriber($email, $name);  
 }//if 
