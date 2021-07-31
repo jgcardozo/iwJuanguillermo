@@ -49,41 +49,17 @@ class Subscriber{
 
   public function findSubscriber($email)
   {
-
-
-  $url = $this->urlSubscribers;
-  $params = [
-      'ws.op' => 'find',
-      //'ad_tracking' => 'ebook',
-/*       'area_code' => 555,
-      'city' => 'Chalfont',
-      'country' => 'United States',
-      'custom_fields' => json_encode(['apple' => 'fuji', 'pear' => 'bosc']),
-      'dma_code' => 504, */
-      'email' => $email,
-      /* 'last_followup_message_number_sent' => 0,
-      'last_followup_message_sent_at' => '2017-11-28',
-      'latitude' => 37.751,
-      'longitude' => -97.822,
-      'misc_notes' => 'ebook',
-      'name' => 'John Doe',
-      'postal_code' => '99999-9999',
-      'region' => 'PA',
-      'status' => 'unconfirmed',
-      'subscribed_at' => '2017-07-16',
-      'subscription_method' => 'api',
-      'tags' => json_encode(['fast']),
-      'tags_not_in' => json_encode(['slow']),
-      'unsubscribe_method' => 'api: move',
-      'unsubscribed_at' => '2017-10-13',
-      'verified_at' => '2017-07-18' */
-  ];
-  $findUrl = $url . '?' . http_build_query($params);
-  $response = Account::Cliente()->get($findUrl, ['headers' => $this->headers]);
-  $body = json_decode($response->getBody(), true);
-  $this->statusCode = $response->getStatusCode(); 
-  //$response->getReasonPhrase();
-  return $body;
+      $url = $this->urlSubscribers;
+      $params = [
+          'ws.op' => 'find',
+          'email' => $email,
+      ];
+      $findUrl = $url . '?' . http_build_query($params);
+      $response = Account::Cliente()->get($findUrl, ['headers' => $this->headers]);
+      $body = json_decode($response->getBody(), true);
+      $this->statusCode = $response->getStatusCode(); 
+      //$response->getReasonPhrase();
+      return $body;
   } //findSubscriber
 
 
@@ -92,28 +68,22 @@ class Subscriber{
   {
 
   $body = [
-    /*     'ad_tracking' => 'ebook',
+
+        'email' => $email,
+        'name'  => $name,
+        'ip_address' => '190.90.155.129', //$this->ipUser,
+        'tags' => [
+            'test_new_sub',
+          ],
+   
+              /*     'ad_tracking' => 'ebook',
         'custom_fields' => [
           'apple' => 'fuji',
           'pear' => 'bosc'
         ], */
-        'email' => $email,
-        'name'  => $name,
-        'ip_address' => '190.90.155.129', //$this->ipUser,
-        'last_followup_message_number_sent' => 0,
-        'misc_notes' => 'string',
-        'strict_custom_fields' => true,
-    /*     'tags' => [
-          'slow',
-          'fast',
-          'lightspeed'
-        ] */
       ];
 
-
-
-      $url = $this->urlSubscribers;
-      
+      $url = $this->urlSubscribers; 
       $response = Account::Cliente()->post($url, ['json' => $body, 'headers' => $this->headers]);
       $data = $response->getHeader('Location')[0];
     
@@ -127,49 +97,30 @@ class Subscriber{
 
     public function updateSubscriber($email, $name, $subsId) 
     {
-
+      // $tag; para no harcodear
       $body = [
-/*         'ad_tracking' => 'ebook',
+        'email' => $email,
+        'name'  => $name,
+        'tags' => [
+          'add' => [
+            'test_existing_sub'
+          ],
+          'remove' => [
+            'test_new_sub'
+          ]
+        ]
+                 /*,
         'custom_fields' => [
           'apple' => 'fuji',
           'pear' => 'bosc'
-        ], */
-        'email' => $email,
-        'name'  => $name,
-     /*    'last_followup_message_number_sent' => 0,
-        'misc_notes' => 'string',     
-        'strict_custom_fields' => true, */
-        /*
-        'tags' => [
-          'add' => [
-            'fast',
-            'lightspeed'
-          ],
-          'remove' => [
-            'slow'
-          ]
-        ] */
+        ], */ 
       ];
       $url = $this->urlSubscribers   .'/'.$subsId;
-      //$params = ['email' => $email];
-      //$patchUrl = $url . '?' . http_build_query($params);
-      //$response = Account::Cliente()->patch($patchUrl, ['json' => $body, 'headers' => $this->headers]);
       $response = Account::Cliente()->patch($url, ['json' => $body, 'headers' => $this->headers]);
       $body = json_decode($response->getbody(), true);
       return $body;
     } //updateSubscriber()
 
-
-
-   // juan
-/*         try { 
-            $accounts =  $cuenta->getAccountData($url) ; 
-            $res['status']  = count($accounts)>0 ? 'ok': 'error' ;
-            $res['message'] = count($accounts)>0 ? 'everything went well': 'check your endPoint url' ;
-        } catch (\Throwable $error) {
-            $res['status']  = 'Controlled exception';
-            $res['message'] =  $error->getMessage() ;
-        }//try */
 
 
 

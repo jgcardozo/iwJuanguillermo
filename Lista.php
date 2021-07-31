@@ -9,25 +9,39 @@ require_once("Account.php");
 
    
     public $url;
-   
-    public function getListId($url){
+    private $accessToken, $headers;
 
-        $accessToken = Account::$accessToken;
 
-        $headers = [
+    public function __construct(){
+        $this->accessToken = Account::$accessToken;
+        $this->headers = [
             'User-Agent' => 'AWeber-PHP-code-sample/1.0',
             'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $accessToken
+            'Authorization' => 'Bearer ' . $this->accessToken
         ];
+    }
+
+   
+    public function getListId($url)
+    {
         $url = "https://api.aweber.com/1.0/accounts/".Account::$accountId."/lists";
-        $response = Account::Cliente()->get($url, ['headers' => $headers]);
+        $response = Account::Cliente()->get($url, ['headers' => $this->headers]);
         $body = json_decode($response->getBody(), true);
      
         return $body;
-    
-   
+    } //funct getListId
 
-   } //funct getListId
+
+
+/*    public function getTags(){
+
+    self::getListId()
+
+    //$tagUrl = $lists[0]['self_link'] . '/tags';
+
+   } // getTags
+ */
+
 
  }//class 
 

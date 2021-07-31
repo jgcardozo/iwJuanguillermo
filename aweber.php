@@ -1,9 +1,31 @@
 <?php
 
 /*
+estos datos es solo pq son una prueba, obvio por seguridad no deben estar a la mano 
+
     $clientId                = 'jAbFHEEpox3a3O6eYWsNcDrpK86blssW';    
-    $clientSecret            = 'COIvsBWq2xWeT8P5Fj44P1xFhm45M2YX';  
+    $clientSecret            = 'COIvsBWq2xWeT8P5Fj44P1xFhm45M2YX';
+
+
+    aweber api : juanguillermopc@live.com  Claro170723
+    aweber :  ""   Aweber0325
+
+       // juan
+         try { 
+            $accounts =  $cuenta->getAccountData($url) ; 
+            $res['status']  = count($accounts)>0 ? 'ok': 'error' ;
+            $res['message'] = count($accounts)>0 ? 'everything went well': 'check your endPoint url' ;
+        } catch (\Throwable $error) {
+            $res['status']  = 'Controlled exception';
+            $res['message'] =  $error->getMessage() ;
+        }//try 
+        
+        
+        
 */
+
+    
+
  
 require 'vendor/autoload.php';
 use League\Oauth2\Client\Provider\GenericProvider;
