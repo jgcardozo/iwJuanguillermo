@@ -6,21 +6,8 @@ estos datos es solo pq son una prueba, obvio por seguridad no deben estar a la m
     $clientId                = 'jAbFHEEpox3a3O6eYWsNcDrpK86blssW';    
     $clientSecret            = 'COIvsBWq2xWeT8P5Fj44P1xFhm45M2YX';
 
-
     aweber api : juanguillermopc@live.com  Claro170723
-    aweber :  ""   Aweber0325
-
-       // juan
-         try { 
-            $accounts =  $cuenta->getAccountData($url) ; 
-            $res['status']  = count($accounts)>0 ? 'ok': 'error' ;
-            $res['message'] = count($accounts)>0 ? 'everything went well': 'check your endPoint url' ;
-        } catch (\Throwable $error) {
-            $res['status']  = 'Controlled exception';
-            $res['message'] =  $error->getMessage() ;
-        }//try 
-        
-        
+    aweber :  ""   Aweber0325    
         
 */
 
@@ -44,7 +31,7 @@ if (strtoupper($createRefresh) == 'C') {
     echo 'Enter your client secret: ';
     $clientSecret = rtrim(fgets(STDIN), PHP_EOL);
 
-    $redirectUri = 'https://www.aweber.com/users/leads'; //'https://localhost';
+    $redirectUri = 'https://www.aweber.com/users/leads'; 
 
     $scopes = array(
         'account.read',
@@ -130,7 +117,7 @@ clientSecret = {$clientSecret}
 accessToken = {$accessToken}
 refreshToken = {$refreshToken}");
 fclose($fp);
-chmod('credentials.ini', 0755);   //600
+chmod('credentials.ini', 0755);  
 echo "Updated credentials.ini with your new credentials\n";
 
 

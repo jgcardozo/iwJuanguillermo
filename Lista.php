@@ -4,43 +4,50 @@ require_once("Account.php");
 
 
 
-  class Lista{  //hice esto aproposito para mostrar que se debe tener cuidado con palabras reservadas como List en este caso
+  class Lista{ 
 
-
-   
-    public $url;
+ 
     private $accessToken, $headers;
 
+    public function __construct()
+    {
+        $this->cuenta     = new Account();
+        $this->urlAccount = 'https://api.aweber.com/1.0/accounts';
+        $this->account    = $this->cuenta->getAccountData($this->urlAccount); 
 
-    public function __construct(){
         $this->accessToken = Account::$accessToken;
         $this->headers = [
             'User-Agent' => 'AWeber-PHP-code-sample/1.0',
             'Accept' => 'application/json',
             'Authorization' => 'Bearer ' . $this->accessToken
         ];
-    }
+                
+    } //construct
 
    
-    public function getListId($url)
+    public function getList() 
     {
-        $url = "https://api.aweber.com/1.0/accounts/".Account::$accountId."/lists";
-        $response = Account::Cliente()->get($url, ['headers' => $this->headers]);
+        $this->url = "https://api.aweber.com/1.0/accounts/".Account::$accountId."/lists";
+        $response = Account::Cliente()->get($this->url, ['headers' => $this->headers]);
         $body = json_decode($response->getBody(), true);
-     
         return $body;
     } //funct getListId
 
 
 
-/*    public function getTags(){
 
-    self::getListId()
-
-    //$tagUrl = $lists[0]['self_link'] . '/tags';
-
-   } // getTags
- */
+ // creo que custom fields puede ir aca, porque tiene relacion o depende de la lista 
+ // aunque para un desarrollo que no sea un test , por desacoplamiento y mas razones puede ser una class aparte
+ // lo mismo getTags, pero por ser test asi puede ser y no es mala practica
+    public function getCustomFields()
+    {
+        $listInfo  = self::getList(); 
+        $url = $listInfo['entries'][0]['custom_fields_collection_link']; 
+ 
+        $response = Account::Cliente()->get($url, ['headers' => $this->headers]);
+        $body = json_decode($response->getBody(), true);
+        return $body;        
+    } //  getCustomFields
 
 
  }//class 

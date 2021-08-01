@@ -16,22 +16,20 @@ class Subscriber{
   private $urlLista ;
 
   private $urlSubscribers;
-  private $ipUser;
   private $headers;
   
-  public $statusCode;
+  private $ipUser;
    
 
   public function __construct()
   {
     $this->cuenta     = new Account();
     $this->urlAccount = 'https://api.aweber.com/1.0/accounts';
-    $this->account    = $this->cuenta->getAccountData($this->urlAccount) ; 
+    $this->account    = $this->cuenta->getAccountData($this->urlAccount); 
     $this->urlLista   = $this->account[0]['lists_collection_link'];
   
-   
     $this->lista     = new Lista();
-    $this->listInfo  = $this->lista->getListId($this->urlLista); 
+    $this->listInfo  = $this->lista->getList();  //$this->urlLista
     $this->listInfo  = $this->listInfo['entries'][0];
     $this->urlLista  = $this->listInfo['self_link'];
      
@@ -57,32 +55,51 @@ class Subscriber{
       $findUrl = $url . '?' . http_build_query($params);
       $response = Account::Cliente()->get($findUrl, ['headers' => $this->headers]);
       $body = json_decode($response->getBody(), true);
-      $this->statusCode = $response->getStatusCode(); 
+      //$this->statusCode = $response->getStatusCode(); 
       //$response->getReasonPhrase();
       return $body;
   } //findSubscriber
 
 
 
-  public function addSubscriber($email, $name)
+  public function addSubscriber($email, $name, $tyc)
   {
 
-  $body = [
-
+      $body = [
         'email' => $email,
         'name'  => $name,
         'ip_address' => '190.90.155.129', //$this->ipUser,
         'tags' => [
             'test_new_sub',
-          ],
-   
-              /*     'ad_tracking' => 'ebook',
-        'custom_fields' => [
-          'apple' => 'fuji',
-          'pear' => 'bosc'
-        ], */
+          ],         
       ];
 
+
+      // esto se puede mejorar con un private static, y llamarlo con self:: 
+      // ,pero lo dejare asi . pq ya mostre en account.class que lo se hacer      
+      if ($tyc=="true"){
+        //url
+        $http = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";  
+        $user_url = $http.$_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+        //ip
+        $user_ip = $_SERVER['REMOTE_ADDR'];
+        // fecha y hora
+        date_default_timezone_set('America/Bogota');
+        $user_fecha = date('Y-m-d');
+        $user_hora  = date('H:i'); 
+
+        // get customFiels for fill it
+        $lista =  new Lista();
+        $cFields = $lista->getCustomFields();
+        $entries = $cFields['entries']; 
+        foreach ($entries as $item) {
+          $body['custom_fields'][$item['name']]     = ${'user_'.$item['name']};
+        } // for 
+
+
+      }//if tyc
+    
+  
       $url = $this->urlSubscribers; 
       $response = Account::Cliente()->post($url, ['json' => $body, 'headers' => $this->headers]);
       $data = $response->getHeader('Location')[0];
@@ -97,7 +114,8 @@ class Subscriber{
 
     public function updateSubscriber($email, $name, $subsId) 
     {
-      // $tag; para no harcodear
+      // harcodee el tag, en este caso no creo necesario traerlos del endpoint,
+      // como si es el caso del los customFields con getCustomFields() 
       $body = [
         'email' => $email,
         'name'  => $name,
@@ -109,11 +127,6 @@ class Subscriber{
             'test_new_sub'
           ]
         ]
-                 /*,
-        'custom_fields' => [
-          'apple' => 'fuji',
-          'pear' => 'bosc'
-        ], */ 
       ];
       $url = $this->urlSubscribers   .'/'.$subsId;
       $response = Account::Cliente()->patch($url, ['json' => $body, 'headers' => $this->headers]);
