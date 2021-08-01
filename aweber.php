@@ -10,12 +10,10 @@ estos datos es solo pq son una prueba, obvio por seguridad no deben estar a la m
     aweber :  ""   Aweber0325    
         
 */
-
-    
-
  
 require 'vendor/autoload.php';
 use League\Oauth2\Client\Provider\GenericProvider;
+
   
 
 const OAUTH_URL = 'https://auth.aweber.com/oauth2/';
