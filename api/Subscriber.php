@@ -9,7 +9,6 @@ require_once("Lista.php");
 
 class Subscriber{
 
-  private $accessToken;
   private $cuenta    ;
   private $urlAccount;
   private $account   ;
@@ -37,16 +36,8 @@ class Subscriber{
      
     $this->urlSubscribers = $this->urlLista."/subscribers";
     $api = new Api();
-    $this->accessToken = $api->accessToken;
-    // este header se puede optimizar pq casi siempre es el mismo,
-    // entonces puede venir listo desde api-class
-    $this->headers = [
-      'Content-Type' => 'application/json',
-      'Accept' => 'application/json',
-      'User-Agent' => 'AWeber-PHP-code-sample/1.0',
-      'Authorization' => 'Bearer ' . $this->accessToken
-    ];
-     
+    $this->headers = $api->headers;
+
   } //construct
 
 
@@ -82,7 +73,8 @@ class Subscriber{
 
 
       // esto se puede mejorar con un private static, y llamarlo con self:: 
-      // ,pero lo dejare asi . pq ya mostre en account.class que lo se hacer      
+      // ,pero lo dejare asi . pq ya mostre en account.class que lo se hacer 
+      // aca no caigo pej en dont repeat yourself o boilerPlate     
       if ($tyc=="true"){
         //url
         $http = ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";  

@@ -7,7 +7,7 @@ require_once("Account.php");
   class Lista{ 
 
  
-    private $accessToken, $headers;
+    private $headers;
 
     public function __construct()
     {
@@ -16,14 +16,7 @@ require_once("Account.php");
         $this->account    = $this->cuenta->getAccountData($this->urlAccount); 
 
         $api = new Api();
-        $this->accessToken = $api->accessToken;
-
-        $this->headers = [
-            'User-Agent' => 'AWeber-PHP-code-sample/1.0',
-            'Accept' => 'application/json',
-            'Authorization' => 'Bearer ' . $this->accessToken
-        ];
-                
+        $this->headers = $api->headers;            
     } //construct
 
    

@@ -1,8 +1,16 @@
 <?php
 
-require_once("Subscriber.php");
 
-require_once("Api.php");
+// los require los dejo asi ../ , pero se solventa con namespace en las clases a llamar 
+// y entonces aca se llaman con sin rutas largas
+
+require_once("../api/Api.php");
+
+require_once("../api/Subscriber.php");
+
+require_once("../db/db.php");
+
+
 
 //getting request variables
 $email  = trim($_POST['email']);
@@ -14,10 +22,6 @@ $result;
 
 
 
-/* $api = new Api();
-$result= $api->refreshToken();
-
-echo $result;  */
 
 $sus = new Subscriber();
 
@@ -32,9 +36,25 @@ if ( count($find['entries']) >0 ) {
   $result = $sus->addSubscriber($email, $name, $tyc);  
 }//if 
 
-print_r($result );  
+print_r($result );   
 
 
+
+// ------------------------
+
+/* $db = new db();
+$result = $db->insertar("susbscribers", "name, email", " 'miguelito' , 'migule@gmail.com' ");
+//$result = $db->seleccionar("susbscribers");
+
+print_r($result); */
+
+// ----------------------------------------------
+
+/* $api = new Api();
+$result= $api->refreshToken();
+
+
+// -----------------------------------------------
 
 
 

@@ -109,8 +109,8 @@
 
 				$.ajax({
                     type: "POST",
-                    url: "SubscriberController.php",
-                    data: { //"function" : "prueba",
+                    url: "controllers/SubscriberController.php",
+                    data: { 
                             "email" : email,
                             "name"  : name,
                             "tyc"   : tyc,   
