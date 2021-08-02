@@ -1,8 +1,8 @@
 <?php
 
+require_once("Api.php");
+
 require_once("Account.php");
-
-
 
   class Lista{ 
 
@@ -15,7 +15,9 @@ require_once("Account.php");
         $this->urlAccount = 'https://api.aweber.com/1.0/accounts';
         $this->account    = $this->cuenta->getAccountData($this->urlAccount); 
 
-        $this->accessToken = Account::$accessToken;
+        $api = new Api();
+        $this->accessToken = $api->accessToken;
+
         $this->headers = [
             'User-Agent' => 'AWeber-PHP-code-sample/1.0',
             'Accept' => 'application/json',
@@ -28,7 +30,7 @@ require_once("Account.php");
     public function getList() 
     {
         $this->url = "https://api.aweber.com/1.0/accounts/".Account::$accountId."/lists";
-        $response = Account::Cliente()->get($this->url, ['headers' => $this->headers]);
+        $response = Api::conexion()->get($this->url, ['headers' => $this->headers]);
         $body = json_decode($response->getBody(), true);
         return $body;
     } //funct getListId
@@ -44,7 +46,7 @@ require_once("Account.php");
         $listInfo  = self::getList(); 
         $url = $listInfo['entries'][0]['custom_fields_collection_link']; 
  
-        $response = Account::Cliente()->get($url, ['headers' => $this->headers]);
+        $response = Api::conexion()->get($url, ['headers' => $this->headers]);
         $body = json_decode($response->getBody(), true);
         return $body;        
     } //  getCustomFields

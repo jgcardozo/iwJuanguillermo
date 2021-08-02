@@ -1,5 +1,7 @@
 <?php
 
+require_once("Api.php");
+
 require_once("Account.php");
 
 require_once("Lista.php");
@@ -7,6 +9,7 @@ require_once("Lista.php");
 
 class Subscriber{
 
+  private $accessToken;
   private $cuenta    ;
   private $urlAccount;
   private $account   ;
@@ -18,7 +21,6 @@ class Subscriber{
   private $urlSubscribers;
   private $headers;
   
-  private $ipUser;
    
 
   public function __construct()
@@ -34,13 +36,17 @@ class Subscriber{
     $this->urlLista  = $this->listInfo['self_link'];
      
     $this->urlSubscribers = $this->urlLista."/subscribers";
+    $api = new Api();
+    $this->accessToken = $api->accessToken;
+    // este header se puede optimizar pq casi siempre es el mismo,
+    // entonces puede venir listo desde api-class
     $this->headers = [
       'Content-Type' => 'application/json',
       'Accept' => 'application/json',
       'User-Agent' => 'AWeber-PHP-code-sample/1.0',
-      'Authorization' => 'Bearer ' . Account::$accessToken,
+      'Authorization' => 'Bearer ' . $this->accessToken
     ];
-    $this->ipUser = $_SERVER['REMOTE_ADDR'];  
+     
   } //construct
 
 
@@ -53,7 +59,7 @@ class Subscriber{
           'email' => $email,
       ];
       $findUrl = $url . '?' . http_build_query($params);
-      $response = Account::Cliente()->get($findUrl, ['headers' => $this->headers]);
+      $response = Api::conexion()->get($findUrl, ['headers' => $this->headers]);
       $body = json_decode($response->getBody(), true);
       //$this->statusCode = $response->getStatusCode(); 
       //$response->getReasonPhrase();
@@ -101,7 +107,7 @@ class Subscriber{
     
   
       $url = $this->urlSubscribers; 
-      $response = Account::Cliente()->post($url, ['json' => $body, 'headers' => $this->headers]);
+      $response = Api::conexion()->post($url, ['json' => $body, 'headers' => $this->headers]);
       $data = $response->getHeader('Location')[0];
     
       return $data;
@@ -129,7 +135,7 @@ class Subscriber{
         ]
       ];
       $url = $this->urlSubscribers   .'/'.$subsId;
-      $response = Account::Cliente()->patch($url, ['json' => $body, 'headers' => $this->headers]);
+      $response = Api::conexion()->patch($url, ['json' => $body, 'headers' => $this->headers]);
       $body = json_decode($response->getbody(), true);
       return $body;
     } //updateSubscriber()

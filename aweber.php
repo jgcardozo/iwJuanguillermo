@@ -115,7 +115,7 @@ clientSecret = {$clientSecret}
 accessToken = {$accessToken}
 refreshToken = {$refreshToken}");
 fclose($fp);
-chmod('credentials.ini', 0755);  
+chmod('credentials.ini', 777); //0755 
 echo "Updated credentials.ini with your new credentials\n";
 
 

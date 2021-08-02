@@ -2,8 +2,7 @@
 
 require_once("Subscriber.php");
 
-//added for cFieds that are within lista class
-require_once("Lista.php");
+require_once("Api.php");
 
 //getting request variables
 $email  = trim($_POST['email']);
@@ -15,7 +14,10 @@ $result;
 
 
 
+/* $api = new Api();
+$result= $api->refreshToken();
 
+echo $result;  */
 
 $sus = new Subscriber();
 
