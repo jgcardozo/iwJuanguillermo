@@ -6,6 +6,8 @@ require_once("Account.php");
 
 require_once("Lista.php");
 
+require_once("../db/db.php");
+
 
 class Subscriber{
 
@@ -71,6 +73,9 @@ class Subscriber{
           ],         
       ];
 
+      $campos  = "name, email";
+      $valores = " '$name' , '$email' ";
+
 
       // esto se puede mejorar con un private static, y llamarlo con self:: 
       // ,pero lo dejare asi . pq ya mostre en account.class que lo se hacer 
@@ -90,10 +95,15 @@ class Subscriber{
         $lista =  new Lista();
         $cFields = $lista->getCustomFields();
         $entries = $cFields['entries']; 
+
+
         foreach ($entries as $item) {
           $body['custom_fields'][$item['name']]     = ${'user_'.$item['name']};
+ /*          $campos  .= ",".$item['name'];
+          $valores .= " , '".${'user_'.$item['name']}."' "; */
         } // for 
 
+        
 
       }//if tyc
     
@@ -101,6 +111,10 @@ class Subscriber{
       $url = $this->urlSubscribers; 
       $response = Api::conexion()->post($url, ['json' => $body, 'headers' => $this->headers]);
       $data = $response->getHeader('Location')[0];
+
+      // segun entendi solo es para los nuevos usuarios
+      $db = new db();
+      $result = $db->insertar("susbscribers", $campos, $valores); 
     
       return $data;
 

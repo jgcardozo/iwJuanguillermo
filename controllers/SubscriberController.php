@@ -8,9 +8,9 @@ require_once("../api/Api.php");
 
 require_once("../api/Subscriber.php");
 
-require_once("../db/db.php");
 
 
+require_once("../Log.php");
 
 //getting request variables
 $email  = trim($_POST['email']);
@@ -19,6 +19,13 @@ $tyc    = $_POST['tyc'];
 
 // setting local variables
 $result;
+$res  = array();
+
+
+
+/* $estado = "todo ok";
+$log = new Log();
+$log->newLine($email, $estado); */
 
 
 
@@ -31,57 +38,23 @@ if ( count($find['entries']) >0 ) {
   if ( $find['entries'][0]['email'] == $email){
     $subsId = $find['entries'][0]['id']; 
     $result  = $sus->updateSubscriber($email, $name, $subsId);
+    $res['status']  = "ok" ; 
+    $res['message'] = "Haz actualizado tus datos" ;
   }
 }else{
-  $result = $sus->addSubscriber($email, $name, $tyc);  
+  $result = $sus->addSubscriber($email, $name, $tyc);
+  $res['status']  = "ok" ; 
+  $res['message'] = "Te haz registrado exitosamente.";  
 }//if 
-
-print_r($result );   
-
-
-
-// ------------------------
-
-/* $db = new db();
-$result = $db->insertar("susbscribers", "name, email", " 'miguelito' , 'migule@gmail.com' ");
-//$result = $db->seleccionar("susbscribers");
-
-print_r($result); */
-
-// ----------------------------------------------
-
-/* $api = new Api();
-$result= $api->refreshToken();
-
-
-// -----------------------------------------------
-
-
-
-/* $log_filename = "log.txt";
-if (!file_exists($log_filename)) 
-{
-  $fp = fopen($log_filename, 'w+');
-  fwrite($fp,
-  "-----------  Log sistema de subscripcion IwJuan -----------".PHP_EOL);
-  fclose($fp);
-  chmod($log_filename, 0755); 
-}
-
-$estado = "Agregado exitosamente";
-// "Fallo envío {$error}" ;
-date_default_timezone_set('America/Bogota');
-$newLine  = "Correo:".$email.' Fecha:'.date("m/d/yy H:i:s").
-" Estado:".$estado.PHP_EOL;
-
-file_put_contents($log_filename , $newLine, FILE_APPEND); 
-echo "registro agregado al log \n";  */
-
-
-
  
 
 
+  //
+  /* $api = new Api();
+  $refreshToken= $api->refreshToken(); */
+ 
+
+echo json_encode($res); 
 
 
 

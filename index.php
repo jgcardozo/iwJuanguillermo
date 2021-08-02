@@ -19,7 +19,13 @@
 
 
 
-        <div class="card bg-dark  text-white" style="width: 30rem;">
+
+<div class="container px-2 py-3" id="featured-3">
+    <h1 class="pb-2 border-bottom text-primary">Subscriptions system iwJuan</h1>
+    <div class="row g-4 py-5 row-cols-1 row-cols-lg-2">
+      <div class="feature col">
+
+      <div class="card bg-dark  text-white" >
             <div class="card-body">
                 <div class="m-1">
                     <label for="email" class="form-label">Email address</label>
@@ -37,11 +43,34 @@
 
             </div>
         </div> <!-- card -->
+      </div>
+      
 
+      <div class="feature col">
+        <div class="feature-icon bg-primary bg-gradient">
+          <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"/></svg>
+        </div>
+        <h2>Benefits</h2>
+        
 
+        <ul>
+            <li>🏠  Home Office.</li>
+            <li>🇺🇸  English Classes.</li>
+            <li>👨🏽‍💻  Constant career growth opportunities.</li>
+            <li>🕹  Virtual team building activities & challenges.</li>
+            <li>😉  Seniority Perks</li>
+        </ul>
+        <a href="https://ideaware.co/" class="icon-link" target="_blank">
+          Conoce mas sobre nosotros
+          <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
 
+ 
 
-<!-- Modal -->
+<!-- este seria un component , si se trabaja con un framework. como no queda como hardcodeado -->
 <div class="modal fade" id="tycModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -62,7 +91,7 @@
                     <input class="form-check-input" type="checkbox" id="check_tyc" checked>
                     <label class="form-check-label" for="check_tyc">Acepto</label>
             </div>
-      </div> <!-- modal-body -->
+      </div> 
       <div class="modal-footer">
         <button type="button" class="btn btn-dark" data-bs-dismiss="modal" id="btn-continuar">
             <i class="fas fa-door-open mx-3"></i>Cerrar y continuar Registro
@@ -71,7 +100,7 @@
     </div>
   </div>
 </div>
-
+ 
 
 
 
@@ -117,11 +146,16 @@
                         },
                     cache: false,
                     dataType: "json", 
-
     				success: function(res) {
-                   
-                        json = JSON.parse(res);
-                        console.log(json);
+                        
+                        if (res.status == "ok"){
+                            alert(res.message); 
+                           $("#name").val("");
+			               $("#email").val("");
+                        }else{
+                            alert("algo ha ido mal, intentalo mas tarde");
+                        }
+                        
                     } 
 			    }); //ajax
 			} // if validated 

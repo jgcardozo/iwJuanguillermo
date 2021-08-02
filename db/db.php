@@ -23,7 +23,6 @@ class db{
 
     public function insertar($tabla, $campos, $valores){
         $query = "INSERT INTO $tabla ($campos) VALUES ($valores)";
-        echo $query;
         $resultado =    $this->conexiondb->query($query) or die($this->conexiondb->error);
         if($resultado)
             return true;
